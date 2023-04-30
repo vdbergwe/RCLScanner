@@ -20,30 +20,74 @@ using WIA;
 namespace RCLScanner
 {
 
-
-
     public partial class frmMain : Form
     {
+        string SelectedFile;
 
         private void LoadFiles()
         {
-            string directoryPath = @"C:\Temp"; // Replace with the path to your directory
+            string directoryPath = @"C:\Temp";
             string[] fileNames = Directory.GetFiles(directoryPath);
 
-            //DataGridView dataGridView1 = new DataGridView();
-            dataGridView1.ColumnCount = 1;
-            dataGridView1.Columns[0].Name = "File Name";
-            dataGridView1.Columns[0].Width = 189;
+            ButtonContainer.Controls.Clear();
 
-           foreach (var file in fileNames)
+            Button btnRefresh1 = btnRefresh;
+            btnRefresh1.Text = "REFRESH";
+            btnRefresh1.Location = new System.Drawing.Point(45,360);
+            btnRefresh1.Visible = true;
+            ButtonContainer.Controls.Add(btnRefresh1);
+
+            foreach (var file in fileNames)
             {
-               if (file.Substring(file.Length - 4) == ".pdf")
+                if (file.Substring(file.Length - 4) == ".pdf")
                 {
-                    dataGridView1.Rows.Add(file);
-                }
-                if (file.Substring(file.Length - 4) == ".jpg")
-                {
-                    dataGridView1.Rows.Add(file);
+                    // Create a new button
+                    Button btnFile = new Button();
+                    Button btnFileDelete = new Button();
+
+                    // Set the button text to the file name
+                    btnFile.Text = Path.GetFileName(file.ToUpper());
+                    btnFileDelete.Text = "X";
+
+                    // Set the button location and size
+                    btnFile.Location = new System.Drawing.Point(10, 15 + (25 * (ButtonContainer.Controls.Count/2)));
+                    btnFile.Size = new System.Drawing.Size(150, 25);
+                    btnFile.BackColor = Color.LightGray;
+
+                    btnFileDelete.Location = new System.Drawing.Point(165, 15 + (25 * (ButtonContainer.Controls.Count/2)));
+                    btnFileDelete.Size = new System.Drawing.Size(40, 25);
+                    btnFileDelete.BackColor = Color.Red;
+
+
+                    // Add a click event handler for the button
+                    btnFile.Click += (sender, e) =>
+                    {
+                        // Handle button click here
+                       SelectedFile = "C:\\temp\\" + btnFile.Text.ToString();
+                       
+                        PDFtoJPEG(SelectedFile);
+
+                        string fileName = (@"c:\temp\output.jpg").ToString();
+
+                        // Load the full image from a file
+                        System.Drawing.Image fullImage = System.Drawing.Image.FromFile(fileName);
+
+                        // Display the enlarged corner of the full image in a PictureBox
+                        DisplayEnlargedCorner(fullImage, 300);
+
+                        fullImage.Dispose();
+                    };
+
+                    btnFileDelete.Click += (sender, e) =>
+                     {                         
+                         File.Delete(file);
+                         LoadFiles();
+                     };
+
+
+                    // Add the button to the container
+                    ButtonContainer.Controls.Add(btnFile);
+                    ButtonContainer.Controls.Add(btnFileDelete);
                 }
             }
 
@@ -51,13 +95,16 @@ namespace RCLScanner
 
 
 
-            this.Controls.Add(dataGridView1);
+            //this.Controls.Add(dataGridView1);
         }
 
         public frmMain()
         {
             InitializeComponent();
             LoadFiles();
+            this.Left = 100;
+            this.Top = 150;
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -144,32 +191,9 @@ namespace RCLScanner
                 document.Close();
             }
 
-            // Delete the temporary image file
-            //File.Delete("C:\\Temp\\WIA\\NewPOD.jpg");
-
-
             //var dialog = new WIA.CommonDialog();
             //var file = dialog.ShowAcquireImage(WIA.WiaDeviceType.ScannerDeviceType);
             //file.SaveFile("C:\\Temp\\WIA\\NewPOD.jpg");
-        }
-
-        private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                string convertfileName = dataGridView1.Rows[e.RowIndex].Cells["File Name"].Value.ToString();
-
-                PDFtoJPEG(convertfileName);
-
-                string fileName = (@"c:\temp\output.jpg").ToString();
-
-                // Load the full image from a file
-                System.Drawing.Image fullImage = System.Drawing.Image.FromFile(fileName);
-
-                // Display the enlarged corner of the full image in a PictureBox
-                DisplayEnlargedCorner(fullImage, 300);
-
-            }
         }
 
         private void DisplayEnlargedCorner(System.Drawing.Image fullImage, int cornerSize)
@@ -216,6 +240,11 @@ namespace RCLScanner
                     {
                         // Save the image to a file
                         var fileName = $"c:\\temp\\output.jpg";
+                        if (File.Exists(fileName))
+                        {
+                            picBoxEnlarged.Image = null;
+                            File.Delete(fileName);
+                        }
                         image.Save(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
                     }
                 }
@@ -256,9 +285,9 @@ namespace RCLScanner
             var device = firstScannerAvailable.Connect();
 
             // Select the scanner
-            var scannerItem = device.Items[1];      
+            var scannerItem = device.Items[1];
             var scanerItem = (Item)device.Items[1];
-                       
+
             if (rbtnA4.Checked && rbtn150.Checked)
             {
                 Width = 1240;
@@ -304,7 +333,7 @@ namespace RCLScanner
             }
 
             // Save image
-            imageFile.SaveFile(path);                    
+            imageFile.SaveFile(path);
 
             // Convert the saved image to PDF format using iTextSharp
             using (var stream = new FileStream("C:\\Temp\\file.pdf", FileMode.Create))
@@ -318,13 +347,84 @@ namespace RCLScanner
                 document.Close();
             }
 
+            LoadFiles();
             // Delete the temporary image file
             //File.Delete("C:\\Temp\\WIA\\NewPOD.jpg");
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            Close();
+            Application.Exit();
+        }
+
+        private void MenuSettings_Click(object sender, EventArgs e)
+        {
+            var settingsForm = new Settings();
+            settingsForm.Show();
+            this.Visible = false;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            cmbDocType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbDocType.SelectedItem = "POD";
+
+            // Specify the directory you want to manipulate.
+            string path = @"c:\RCLScanner";
+
+            try
+            {
+                // Determine whether the directory exists.
+                if (Directory.Exists(path))
+                {
+                    Console.WriteLine("The root path already exists.");
+                    if (Directory.Exists(@"c:\RCLScanner\Scans"))
+                    {
+                        Console.WriteLine("The scan path exists already.");
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(@"c:\RCLScanner\Scans");
+                    }
+                    if (Directory.Exists(@"c:\RCLScanner\History"))
+                    {
+                        Console.WriteLine("The history path exists already.");
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(@"c:\RCLScanner\History");
+                    }                    
+                }
+                else
+                {
+                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory(@"c:\RCLScanner\Scans");
+                    Directory.CreateDirectory(@"c:\RCLScanner\History");
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("The process failed: {0}", ex.ToString());
+            }
+            finally { }
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadFiles();
+        }
+
+        private void btnProcess_Click(object sender, EventArgs e)
+        {
+            string newfilename = cmbDocType.Text + "_" + txtDocNumber.Text + "_" + dtpDate.Value.ToString("yyyy-MM-dd") + "_" + cmbDocType.Text + ".pdf";
+            File.Move(SelectedFile, @"c:\temp\" + newfilename);
+            
         }
     }
 }

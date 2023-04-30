@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.btnScan = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.MenuFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +55,8 @@
             this.grpBoxDocInfo = new System.Windows.Forms.GroupBox();
             this.picBoxRCLLogo = new System.Windows.Forms.PictureBox();
             this.picBoxEnlarged = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.ButtonContainer = new System.Windows.Forms.GroupBox();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.Menu.SuspendLayout();
             this.grpBoxPageSize.SuspendLayout();
             this.grpBoxResolution.SuspendLayout();
@@ -73,15 +75,6 @@
             this.btnScan.UseVisualStyleBackColor = true;
             this.btnScan.Click += new System.EventHandler(this.btnScan_Click);
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(175, 36);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(232, 416);
-            this.dataGridView1.TabIndex = 1;
-            this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
-            // 
             // Menu
             // 
             this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -96,15 +89,25 @@
             // 
             // MenuFile
             // 
+            this.MenuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
             this.MenuFile.Name = "MenuFile";
             this.MenuFile.Size = new System.Drawing.Size(37, 20);
             this.MenuFile.Text = "File";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // MenuSettings
             // 
             this.MenuSettings.Name = "MenuSettings";
             this.MenuSettings.Size = new System.Drawing.Size(61, 20);
             this.MenuSettings.Text = "Settings";
+            this.MenuSettings.Click += new System.EventHandler(this.MenuSettings_Click);
             // 
             // MenuAbout
             // 
@@ -234,6 +237,9 @@
             // cmbDocType
             // 
             this.cmbDocType.FormattingEnabled = true;
+            this.cmbDocType.Items.AddRange(new object[] {
+            "POD",
+            "INV"});
             this.cmbDocType.Location = new System.Drawing.Point(112, 57);
             this.cmbDocType.Name = "cmbDocType";
             this.cmbDocType.Size = new System.Drawing.Size(121, 21);
@@ -263,6 +269,7 @@
             this.btnProcess.TabIndex = 15;
             this.btnProcess.Text = "PROCESS";
             this.btnProcess.UseVisualStyleBackColor = true;
+            this.btnProcess.Click += new System.EventHandler(this.btnProcess_Click);
             // 
             // grpBoxDocInfo
             // 
@@ -297,12 +304,34 @@
             this.picBoxEnlarged.TabIndex = 2;
             this.picBoxEnlarged.TabStop = false;
             // 
+            // ButtonContainer
+            // 
+            this.ButtonContainer.Location = new System.Drawing.Point(175, 36);
+            this.ButtonContainer.Name = "ButtonContainer";
+            this.ButtonContainer.Size = new System.Drawing.Size(230, 420);
+            this.ButtonContainer.TabIndex = 17;
+            this.ButtonContainer.TabStop = false;
+            this.ButtonContainer.Text = "Pending Files";
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(820, 233);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(140, 40);
+            this.btnRefresh.TabIndex = 5;
+            this.btnRefresh.Text = "REFRESH";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Visible = false;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(971, 464);
+            this.Controls.Add(this.btnRefresh);
+            this.Controls.Add(this.ButtonContainer);
             this.Controls.Add(this.grpBoxDocInfo);
             this.Controls.Add(this.btnProcess);
             this.Controls.Add(this.picBoxRCLLogo);
@@ -310,13 +339,16 @@
             this.Controls.Add(this.grpBoxPageSize);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.picBoxEnlarged);
-            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btnScan);
             this.Controls.Add(this.Menu);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Location = new System.Drawing.Point(100, 150);
             this.MainMenuStrip = this.Menu;
+            this.MaximumSize = new System.Drawing.Size(987, 503);
+            this.MinimumSize = new System.Drawing.Size(987, 503);
             this.Name = "frmMain";
             this.Text = "RCL Scanner";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.Menu.ResumeLayout(false);
             this.Menu.PerformLayout();
             this.grpBoxPageSize.ResumeLayout(false);
@@ -335,7 +367,6 @@
         #endregion
 
         private System.Windows.Forms.Button btnScan;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.PictureBox picBoxEnlarged;
         private System.Windows.Forms.MenuStrip Menu;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -352,7 +383,6 @@
         private System.Windows.Forms.Label lblDocNumber;
         private System.Windows.Forms.TextBox txtDocNumber;
         private System.Windows.Forms.Label lblDocType;
-        private System.Windows.Forms.ComboBox cmbDocType;
         private System.Windows.Forms.DateTimePicker dtpDate;
         private System.Windows.Forms.Label lblDate;
         private System.Windows.Forms.Button btnProcess;
@@ -360,6 +390,10 @@
         private System.Windows.Forms.ToolStripMenuItem MenuFile;
         private System.Windows.Forms.ToolStripMenuItem MenuSettings;
         private System.Windows.Forms.ToolStripMenuItem MenuAbout;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.GroupBox ButtonContainer;
+        private System.Windows.Forms.Button btnRefresh;
+        public System.Windows.Forms.ComboBox cmbDocType;
     }
 }
 
