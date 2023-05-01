@@ -8,8 +8,8 @@
 
   <Identity
     Name="bb639b89-ce99-4eb1-9ca4-76415e42a114"
-    Publisher="CN=werne"
-    Version="1.0.0.0" />
+    Publisher="CN=RCL Foods"
+    Version="1.0.2.0" />
 
   <Properties>
     <DisplayName>RCLScannerPackage</DisplayName>
