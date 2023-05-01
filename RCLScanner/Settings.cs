@@ -14,7 +14,7 @@ namespace RCLScanner
     public partial class Settings : Form
     {
 
-        string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\werne\source\repos\vdbergwe\RCLScanner\RCLScanner\LocalDB.mdf;Integrated Security=True";
+        string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\RCLScanner\LocalDB.mdf;Integrated Security=True";
 
         public Settings()
         {

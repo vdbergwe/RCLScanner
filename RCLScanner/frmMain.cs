@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -23,17 +24,22 @@ namespace RCLScanner
     public partial class frmMain : Form
     {
         string SelectedFile;
+        string ScanDirectory;
+        string UploadDirectory;
+        string HistoryDirectory;
+        string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\RCLScanner\LocalDB.mdf;Integrated Security=True";
+
 
         private void LoadFiles()
         {
-            string directoryPath = @"C:\Temp";
+            string directoryPath = ScanDirectory;
             string[] fileNames = Directory.GetFiles(directoryPath);
 
             ButtonContainer.Controls.Clear();
 
             Button btnRefresh1 = btnRefresh;
             btnRefresh1.Text = "REFRESH";
-            btnRefresh1.Location = new System.Drawing.Point(45,360);
+            btnRefresh1.Location = new System.Drawing.Point(45, 360);
             btnRefresh1.Visible = true;
             ButtonContainer.Controls.Add(btnRefresh1);
 
@@ -50,11 +56,11 @@ namespace RCLScanner
                     btnFileDelete.Text = "X";
 
                     // Set the button location and size
-                    btnFile.Location = new System.Drawing.Point(10, 15 + (25 * (ButtonContainer.Controls.Count/2)));
+                    btnFile.Location = new System.Drawing.Point(10, 15 + (25 * (ButtonContainer.Controls.Count / 2)));
                     btnFile.Size = new System.Drawing.Size(150, 25);
                     btnFile.BackColor = Color.LightGray;
 
-                    btnFileDelete.Location = new System.Drawing.Point(165, 15 + (25 * (ButtonContainer.Controls.Count/2)));
+                    btnFileDelete.Location = new System.Drawing.Point(165, 15 + (25 * (ButtonContainer.Controls.Count / 2)));
                     btnFileDelete.Size = new System.Drawing.Size(40, 25);
                     btnFileDelete.BackColor = Color.Red;
 
@@ -63,11 +69,11 @@ namespace RCLScanner
                     btnFile.Click += (sender, e) =>
                     {
                         // Handle button click here
-                       SelectedFile = "C:\\temp\\" + btnFile.Text.ToString();
-                       
+                        SelectedFile = ScanDirectory + "\\" + btnFile.Text.ToString();
+
                         PDFtoJPEG(SelectedFile);
 
-                        string fileName = (@"c:\temp\output.jpg").ToString();
+                        string fileName = (ScanDirectory + "\\" + "Enlarged.jpg").ToString();
 
                         // Load the full image from a file
                         System.Drawing.Image fullImage = System.Drawing.Image.FromFile(fileName);
@@ -79,7 +85,7 @@ namespace RCLScanner
                     };
 
                     btnFileDelete.Click += (sender, e) =>
-                     {                         
+                     {
                          File.Delete(file);
                          LoadFiles();
                      };
@@ -101,10 +107,10 @@ namespace RCLScanner
         public frmMain()
         {
             InitializeComponent();
-            LoadFiles();
+            
             this.Left = 100;
             this.Top = 150;
-            
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -165,7 +171,7 @@ namespace RCLScanner
             var imageFile = (ImageFile)scannerItem.Transfer(FormatID.wiaFormatJPEG);
 
             // Save the image in some path with filename
-            var path = @"C:\Temp\WIA\NewPOD.jpg";
+            var path = ScanDirectory + "\\" + DateTime.Now.ToString() + ".jpg";
 
             if (File.Exists(path))
             {
@@ -180,16 +186,18 @@ namespace RCLScanner
 
 
             // Convert the saved image to PDF format using iTextSharp
-            using (var stream = new FileStream("C:\\Temp\\file.pdf", FileMode.Create))
+            using (var stream = new FileStream(ScanDirectory + "\\" + DateTime.Now.ToString() + ".pdf", FileMode.Create))
             {
                 var document = new Document(PageSize.A4, 0, 0, 0, 0);
                 var writer = PdfWriter.GetInstance(document, stream);
                 document.Open();
-                var image = iTextSharp.text.Image.GetInstance("C:\\Temp\\WIA\\NewPOD.jpg");
+                var image = iTextSharp.text.Image.GetInstance(path);
                 image.ScaleToFit(PageSize.A4.Width, PageSize.A4.Height);
                 document.Add(image);
                 document.Close();
             }
+
+            File.Delete(path);
 
             //var dialog = new WIA.CommonDialog();
             //var file = dialog.ShowAcquireImage(WIA.WiaDeviceType.ScannerDeviceType);
@@ -239,7 +247,7 @@ namespace RCLScanner
                     using (var image = rasterizer.GetPage(96, i))
                     {
                         // Save the image to a file
-                        var fileName = $"c:\\temp\\output.jpg";
+                        var fileName = ScanDirectory + "\\" + "enlarged.jpg";
                         if (File.Exists(fileName))
                         {
                             picBoxEnlarged.Image = null;
@@ -374,45 +382,139 @@ namespace RCLScanner
             cmbDocType.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDocType.SelectedItem = "POD";
 
-            // Specify the directory you want to manipulate.
-            string path = @"c:\RCLScanner";
-
-            try
+            if (Directory.Exists(@"C:\RCLScanner") == false) 
             {
-                // Determine whether the directory exists.
-                if (Directory.Exists(path))
+                Directory.CreateDirectory(@"C:\RCLScanner");
+
+                String str;
+                SqlConnection myConn = new SqlConnection(@"Server=localhost\sqlexpress;Integrated security=True;database=master");
+
+                str = "CREATE DATABASE LocalDB ON PRIMARY " +
+                 "(NAME = LocalDB, " +
+                 "FILENAME = 'C:\\RCLScanner\\LocalDB.mdf', " +
+                 "SIZE = 2MB, MAXSIZE = 1024MB, FILEGROWTH = 10%)" +
+                 "LOG ON (NAME = LocalDB_Log, " +
+                 "FILENAME = 'C:\\RCLScanner\\LocalDB.ldf', " +
+                 "SIZE = 1MB, " +
+                 "MAXSIZE = 5MB, " +
+                 "FILEGROWTH = 10%)";
+
+                SqlCommand myCommand = new SqlCommand(str, myConn);
+                try
                 {
-                    Console.WriteLine("The root path already exists.");
-                    if (Directory.Exists(@"c:\RCLScanner\Scans"))
+                    myConn.Open();
+                    myCommand.ExecuteNonQuery();
+                    MessageBox.Show("DataBase is Created Successfully", "MyProgram", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), "MyProgram", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                finally
+                {
+                    if (myConn.State == ConnectionState.Open)
                     {
-                        Console.WriteLine("The scan path exists already.");
+                        myConn.Close();
                     }
-                    else
+                }
+
+            }
+
+
+            string query = "SELECT COUNT(*) FROM AppSettings Where Id = 1";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                // Open the connection
+                connection.Open();
+
+                SqlCommand comm = new SqlCommand(query, connection);
+                Int32 Count = (Int32)comm.ExecuteScalar();
+
+                if (Count == 0)
+                {
+                    // SQL query to insert a new row into the table
+                    query = "INSERT INTO AppSettings VALUES (1,@WorkstationID,@ScanDirectory,@UploadDirectory,@HistoryDirectory)";
+
+                    using (connection)
                     {
-                        Directory.CreateDirectory(@"c:\RCLScanner\Scans");
+
+                        // Create a command object with the query and connection
+                        using (SqlCommand InsertCommand = new SqlCommand(query, connection))
+                        {
+                            // Set parameter values for the query                    
+                            InsertCommand.Parameters.AddWithValue("@WorkstationID", System.Environment.MachineName.ToString());
+                            InsertCommand.Parameters.AddWithValue("@ScanDirectory", @"C:\RCLScanner\Scans");
+                            InsertCommand.Parameters.AddWithValue("@UploadDirectory", @"C:\RCLScanner");
+                            InsertCommand.Parameters.AddWithValue("@HistoryDirectory", @"C:\RCLScanner\History");
+
+                            // Execute the query
+                            int result = InsertCommand.ExecuteNonQuery();
+                        }
                     }
-                    if (Directory.Exists(@"c:\RCLScanner\History"))
-                    {
-                        Console.WriteLine("The history path exists already.");
-                    }
-                    else
-                    {
-                        Directory.CreateDirectory(@"c:\RCLScanner\History");
-                    }                    
                 }
                 else
                 {
-                    Directory.CreateDirectory(path);
-                    Directory.CreateDirectory(@"c:\RCLScanner\Scans");
-                    Directory.CreateDirectory(@"c:\RCLScanner\History");
+                    // SQL query to select data from the table
+                    query = "SELECT WorkstationID,ScanDirectory,UploadDirectory,HistoryDirectory FROM AppSettings WHERE Id = 1";
+
+                    // Create a command object with the query and connection
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Execute the query and get a data reader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            // Loop through the rows in the data reader and display the values in a message box
+                            while (reader.Read())
+                            {                                
+                                ScanDirectory = reader.GetString(1);
+                                UploadDirectory = reader.GetString(2);
+                                HistoryDirectory = reader.GetString(3);
+
+                                string path = @"c:\RCLScanner";
+
+                                try
+                                {
+                                    // Determine whether the directory exists.
+                                    if (Directory.Exists(path))
+                                    {
+                                        Console.WriteLine("The root path already exists.");
+                                        if (Directory.Exists(ScanDirectory))
+                                        {
+                                            Console.WriteLine("The scan path exists already.");
+                                        }
+                                        else
+                                        {
+                                            Directory.CreateDirectory(ScanDirectory);
+                                        }
+                                        if (Directory.Exists(HistoryDirectory))
+                                        {
+                                            Console.WriteLine("The history path exists already.");
+                                        }
+                                        else
+                                        {
+                                            Directory.CreateDirectory(HistoryDirectory);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Directory.CreateDirectory(path);
+                                        Directory.CreateDirectory(ScanDirectory);
+                                        Directory.CreateDirectory(HistoryDirectory);
+                                    }
+                                }
+
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("The process failed: {0}", ex.ToString());
+                                }
+                                finally { }
+                            }
+                        }
+                    }
                 }
             }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("The process failed: {0}", ex.ToString());
-            }
-            finally { }
+            LoadFiles();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -423,8 +525,14 @@ namespace RCLScanner
         private void btnProcess_Click(object sender, EventArgs e)
         {
             string newfilename = cmbDocType.Text + "_" + txtDocNumber.Text + "_" + dtpDate.Value.ToString("yyyy-MM-dd") + "_" + cmbDocType.Text + ".pdf";
-            File.Move(SelectedFile, @"c:\temp\" + newfilename);
-            
+            //Rename Selected File
+            File.Move(SelectedFile, ScanDirectory + "\\" + newfilename);
+            //Upload to Online Repository
+            File.Copy(ScanDirectory + "\\" + newfilename, UploadDirectory + "\\" + newfilename);
+            //Move file to History location
+            File.Move(ScanDirectory + "\\" + newfilename, HistoryDirectory + "\\" + newfilename);
+            LoadFiles();
+            picBoxEnlarged.ImageLocation = "C:\\RCLScanner\\Completed400.jpg";
         }
     }
 }

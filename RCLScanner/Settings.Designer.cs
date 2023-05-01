@@ -177,6 +177,8 @@ namespace RCLScanner
             this.Controls.Add(this.lblWorkstationID);
             this.Controls.Add(this.Menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(360, 258);
+            this.MinimumSize = new System.Drawing.Size(360, 258);
             this.Name = "Settings";
             this.Text = "RCL Scanner - Settings";
             this.Load += new System.EventHandler(this.Settings_Load);
