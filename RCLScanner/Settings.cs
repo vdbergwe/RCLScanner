@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WIA;
 
 namespace RCLScanner
 {
@@ -100,6 +101,33 @@ namespace RCLScanner
                     // Show the number of rows affected in a message box
                     MessageBox.Show($"{result} rows inserted.");
                 }
+            }
+        }
+
+        private void btnFindScanners_Click(object sender, EventArgs e)
+        {
+            // Create an instance of the WIA Common Dialog class
+            var dialog = new WIA.CommonDialog();
+
+            // Create a DeviceManager instance
+            var deviceManager = new DeviceManager();
+
+            //// Create an empty variable to store the scanner instance
+            //DeviceInfo firstScannerAvailable = null;
+
+            // Loop through the list of devices to choose the first available
+            for (int i = 1; i <= deviceManager.DeviceInfos.Count; i++)
+            {
+                // Skip the device if it's not a scanner
+                if (deviceManager.DeviceInfos[i].Type != WiaDeviceType.ScannerDeviceType)
+                {
+                    continue;
+                }
+
+                cmbScanner.Items.Add(deviceManager.DeviceInfos[i].DeviceID);
+                //firstScannerAvailable = deviceManager.DeviceInfos[i];
+
+                break;
             }
         }
     }

@@ -112,7 +112,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </PRIResource>
     <Content Include="LocalDB_log.ldf" />
-    <None Include="RCLScannerPackage_TemporaryKey.pfx" />
   </ItemGroup>
   <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
   <ItemGroup>

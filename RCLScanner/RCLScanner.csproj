@@ -74,10 +74,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>3C1A41BFD48A20718BD70C050784C660FD4E390E</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>AC47A07A957AD015879622CC598744555D1648BB</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>RCLScanner_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>RCLScanner_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -201,18 +201,20 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="RCLScanner_TemporaryKey.pfx" />
+    <None Include="RCLScanner_1_TemporaryKey.pfx" />
     <None Include="Resources\RCL_Logo_0420232.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LocalDB.mdf">
+    <Content Include="RCL_Logo_0420232.ico" />
+    <None Include="Resources\LocalDB.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="LocalDB_log.ldf">
+    </None>
+    <Content Include="Resources\LocalDB_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>LocalDB.mdf</DependentUpon>
     </Content>
-    <Content Include="RCL_Logo_0420232.ico" />
+    <None Include="Resources\SelectFile400.jpg" />
+    <None Include="Resources\Completed400.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

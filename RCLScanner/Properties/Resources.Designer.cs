@@ -63,9 +63,39 @@ namespace RCLScanner.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Completed400 {
+            get {
+                object obj = ResourceManager.GetObject("Completed400", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] LocalDB {
+            get {
+                object obj = ResourceManager.GetObject("LocalDB", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap RCL_Logo_04202321 {
             get {
                 object obj = ResourceManager.GetObject("RCL_Logo_04202321", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SelectFile400 {
+            get {
+                object obj = ResourceManager.GetObject("SelectFile400", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

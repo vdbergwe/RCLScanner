@@ -44,6 +44,8 @@ namespace RCLScanner
             this.txtBoxHistoryDirectory = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnUpdate = new System.Windows.Forms.Button();
+            this.cmbScanner = new System.Windows.Forms.ComboBox();
+            this.btnFindScanners = new System.Windows.Forms.Button();
             this.Menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,7 +56,7 @@ namespace RCLScanner
             this.MenuAbout});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(344, 24);
+            this.Menu.Size = new System.Drawing.Size(597, 24);
             this.Menu.TabIndex = 4;
             this.Menu.Text = "menuStrip1";
             // 
@@ -161,11 +163,31 @@ namespace RCLScanner
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
+            // cmbScanner
+            // 
+            this.cmbScanner.FormattingEnabled = true;
+            this.cmbScanner.Location = new System.Drawing.Point(64, 210);
+            this.cmbScanner.Name = "cmbScanner";
+            this.cmbScanner.Size = new System.Drawing.Size(259, 21);
+            this.cmbScanner.TabIndex = 14;
+            // 
+            // btnFindScanners
+            // 
+            this.btnFindScanners.Location = new System.Drawing.Point(207, 237);
+            this.btnFindScanners.Name = "btnFindScanners";
+            this.btnFindScanners.Size = new System.Drawing.Size(116, 38);
+            this.btnFindScanners.TabIndex = 15;
+            this.btnFindScanners.Text = "Find Scanner";
+            this.btnFindScanners.UseVisualStyleBackColor = true;
+            this.btnFindScanners.Click += new System.EventHandler(this.btnFindScanners_Click);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(344, 219);
+            this.ClientSize = new System.Drawing.Size(597, 470);
+            this.Controls.Add(this.btnFindScanners);
+            this.Controls.Add(this.cmbScanner);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.txtBoxHistoryDirectory);
             this.Controls.Add(this.label3);
@@ -177,8 +199,6 @@ namespace RCLScanner
             this.Controls.Add(this.lblWorkstationID);
             this.Controls.Add(this.Menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(360, 258);
-            this.MinimumSize = new System.Drawing.Size(360, 258);
             this.Name = "Settings";
             this.Text = "RCL Scanner - Settings";
             this.Load += new System.EventHandler(this.Settings_Load);
@@ -205,5 +225,7 @@ namespace RCLScanner
         private System.Windows.Forms.TextBox txtBoxHistoryDirectory;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.ComboBox cmbScanner;
+        private System.Windows.Forms.Button btnFindScanners;
     }
 }
