@@ -56,7 +56,7 @@ namespace RCLScanner
             this.MenuAbout});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(597, 24);
+            this.Menu.Size = new System.Drawing.Size(334, 24);
             this.Menu.TabIndex = 4;
             this.Menu.Text = "menuStrip1";
             // 
@@ -185,7 +185,7 @@ namespace RCLScanner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(597, 470);
+            this.ClientSize = new System.Drawing.Size(334, 284);
             this.Controls.Add(this.btnFindScanners);
             this.Controls.Add(this.cmbScanner);
             this.Controls.Add(this.btnUpdate);

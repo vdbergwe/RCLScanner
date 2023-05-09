@@ -150,6 +150,7 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="NetworkHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs">
@@ -206,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="RCL_Logo_0420232.ico" />
+    <None Include="Resources\Waiting400.png" />
     <None Include="Resources\LocalDB.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
