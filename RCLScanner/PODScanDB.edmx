@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="zzPODScanDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ScanClientConfig">
+          <Key>
+            <PropertyRef Name="ConfigID" />
+          </Key>
+          <Property Name="ConfigID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PCName" Type="nchar" MaxLength="256" />
+          <Property Name="MainFolder" Type="nchar" MaxLength="256" Nullable="false" />
+          <Property Name="ScanFolder" Type="nchar" MaxLength="256" />
+          <Property Name="PendingFolder" Type="nchar" MaxLength="256" />
+          <Property Name="HistoryFolder" Type="nchar" MaxLength="256" />
+          <Property Name="Validation" Type="nchar" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="ScanEventLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SiteName" Type="nchar" MaxLength="200" />
+          <Property Name="EventKey" Type="nchar" MaxLength="200" />
+          <Property Name="EventStamp" Type="datetime" />
+          <Property Name="EventDetail" Type="nchar" MaxLength="512" />
+          <Property Name="LogOrigin" Type="nchar" MaxLength="512" />
+          <Property Name="LogCreationDate" Type="date" />
+          <Property Name="LogCreationTime" Type="time" Precision="7" />
+        </EntityType>
+        <EntityType Name="ScanGlobalConfig">
+          <Key>
+            <PropertyRef Name="ConfigID" />
+          </Key>
+          <Property Name="ConfigID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RepositoryPath" Type="nchar" MaxLength="512" />
+          <Property Name="RepositoryUserName" Type="nchar" MaxLength="50" />
+          <Property Name="RepositoryPassword" Type="nchar" MaxLength="50" />
+          <Property Name="RetryFreq" Type="nchar" MaxLength="3" />
+          <Property Name="MainFolder" Type="nchar" MaxLength="256" />
+          <Property Name="ScanFolder" Type="nchar" MaxLength="256" />
+          <Property Name="PendingFolder" Type="nchar" MaxLength="256" />
+          <Property Name="HistoryFolder" Type="nchar" MaxLength="256" />
+          <Property Name="Validation" Type="nchar" MaxLength="1" />
+        </EntityType>
+        <EntityContainer Name="zzPODScanDBModelStoreContainer">
+          <EntitySet Name="ScanClientConfig" EntityType="Self.ScanClientConfig" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScanEventLog" EntityType="Self.ScanEventLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScanGlobalConfig" EntityType="Self.ScanGlobalConfig" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="zzPODScanDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="zzPODScanDBEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="ScanClientConfigs" EntityType="zzPODScanDBModel.ScanClientConfig" />
+          <EntitySet Name="ScanEventLogs" EntityType="zzPODScanDBModel.ScanEventLog" />
+          <EntitySet Name="ScanGlobalConfigs" EntityType="zzPODScanDBModel.ScanGlobalConfig" />
+        </EntityContainer>
+        <EntityType Name="ScanClientConfig">
+          <Key>
+            <PropertyRef Name="ConfigID" />
+          </Key>
+          <Property Name="ConfigID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PCName" Type="String" MaxLength="256" FixedLength="true" Unicode="true" />
+          <Property Name="MainFolder" Type="String" Nullable="false" MaxLength="256" FixedLength="true" Unicode="true" />
+          <Property Name="ScanFolder" Type="String" MaxLength="256" FixedLength="true" Unicode="true" />
+          <Property Name="PendingFolder" Type="String" MaxLength="256" FixedLength="true" Unicode="true" />
+          <Property Name="HistoryFolder" Type="String" MaxLength="256" FixedLength="true" Unicode="true" />
+          <Property Name="Validation" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ScanEventLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SiteName" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="EventKey" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="EventStamp" Type="DateTime" Precision="3" />
+          <Property Name="EventDetail" Type="String" MaxLength="512" FixedLength="true" Unicode="true" />
+          <Property Name="LogOrigin" Type="String" MaxLength="512" FixedLength="true" Unicode="true" />
+          <Property Name="LogCreationDate" Type="DateTime" Precision="0" />
+          <Property Name="LogCreationTime" Type="Time" Precision="7" />
+        </EntityType>
+        <EntityType Name="ScanGlobalConfig">
+          <Key>
+            <PropertyRef Name="ConfigID" />
+          </Key>
+          <Property Name="ConfigID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RepositoryPath" Type="String" MaxLength="512" FixedLength="true" Unicode="true" />
+          <Property Name="RepositoryUserName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="RepositoryPassword" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="RetryFreq" Type="String" MaxLength="3" FixedLength="true" Unicode="true" />
+          <Property Name="MainFolder" Type="String" MaxLength="256" FixedLength="true" Unicode="true" />
+          <Property Name="ScanFolder" Type="String" MaxLength="256" FixedLength="true" Unicode="true" />
+          <Property Name="PendingFolder" Type="String" MaxLength="256" FixedLength="true" Unicode="true" />
+          <Property Name="HistoryFolder" Type="String" MaxLength="256" FixedLength="true" Unicode="true" />
+          <Property Name="Validation" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="zzPODScanDBModelStoreContainer" CdmEntityContainer="zzPODScanDBEntities" >
+          <EntitySetMapping Name="ScanClientConfigs">
+            <EntityTypeMapping TypeName="zzPODScanDBModel.ScanClientConfig">
+              <MappingFragment StoreEntitySet="ScanClientConfig">
+                <ScalarProperty Name="Validation" ColumnName="Validation" />
+                <ScalarProperty Name="HistoryFolder" ColumnName="HistoryFolder" />
+                <ScalarProperty Name="PendingFolder" ColumnName="PendingFolder" />
+                <ScalarProperty Name="ScanFolder" ColumnName="ScanFolder" />
+                <ScalarProperty Name="MainFolder" ColumnName="MainFolder" />
+                <ScalarProperty Name="PCName" ColumnName="PCName" />
+                <ScalarProperty Name="ConfigID" ColumnName="ConfigID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScanEventLogs">
+            <EntityTypeMapping TypeName="zzPODScanDBModel.ScanEventLog">
+              <MappingFragment StoreEntitySet="ScanEventLog">
+                <ScalarProperty Name="LogCreationTime" ColumnName="LogCreationTime" />
+                <ScalarProperty Name="LogCreationDate" ColumnName="LogCreationDate" />
+                <ScalarProperty Name="LogOrigin" ColumnName="LogOrigin" />
+                <ScalarProperty Name="EventDetail" ColumnName="EventDetail" />
+                <ScalarProperty Name="EventStamp" ColumnName="EventStamp" />
+                <ScalarProperty Name="EventKey" ColumnName="EventKey" />
+                <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScanGlobalConfigs">
+            <EntityTypeMapping TypeName="zzPODScanDBModel.ScanGlobalConfig">
+              <MappingFragment StoreEntitySet="ScanGlobalConfig">
+                <ScalarProperty Name="Validation" ColumnName="Validation" />
+                <ScalarProperty Name="HistoryFolder" ColumnName="HistoryFolder" />
+                <ScalarProperty Name="PendingFolder" ColumnName="PendingFolder" />
+                <ScalarProperty Name="ScanFolder" ColumnName="ScanFolder" />
+                <ScalarProperty Name="MainFolder" ColumnName="MainFolder" />
+                <ScalarProperty Name="RetryFreq" ColumnName="RetryFreq" />
+                <ScalarProperty Name="RepositoryPassword" ColumnName="RepositoryPassword" />
+                <ScalarProperty Name="RepositoryUserName" ColumnName="RepositoryUserName" />
+                <ScalarProperty Name="RepositoryPath" ColumnName="RepositoryPath" />
+                <ScalarProperty Name="ConfigID" ColumnName="ConfigID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
