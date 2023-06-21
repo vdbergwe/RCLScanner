@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.btnScan = new System.Windows.Forms.Button();
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.MenuFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,6 +79,8 @@
             this.btnRotate = new System.Windows.Forms.Button();
             this.btnRotateAnti = new System.Windows.Forms.Button();
             this.btnAddPage = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtBoxGRNumber = new System.Windows.Forms.TextBox();
             this.Menu.SuspendLayout();
             this.grpBoxPageSize.SuspendLayout();
             this.grpBoxResolution.SuspendLayout();
@@ -136,6 +137,7 @@
             this.MenuSettings.Name = "MenuSettings";
             this.MenuSettings.Size = new System.Drawing.Size(61, 20);
             this.MenuSettings.Text = "Settings";
+            this.MenuSettings.Visible = false;
             this.MenuSettings.Click += new System.EventHandler(this.MenuSettings_Click);
             // 
             // MenuAbout
@@ -143,6 +145,7 @@
             this.MenuAbout.Name = "MenuAbout";
             this.MenuAbout.Size = new System.Drawing.Size(52, 20);
             this.MenuAbout.Text = "About";
+            this.MenuAbout.Visible = false;
             // 
             // fileToolStripMenuItem
             // 
@@ -244,7 +247,7 @@
             // lblDocNumber
             // 
             this.lblDocNumber.AutoSize = true;
-            this.lblDocNumber.Location = new System.Drawing.Point(10, 34);
+            this.lblDocNumber.Location = new System.Drawing.Point(10, 16);
             this.lblDocNumber.Name = "lblDocNumber";
             this.lblDocNumber.Size = new System.Drawing.Size(96, 13);
             this.lblDocNumber.TabIndex = 8;
@@ -252,7 +255,7 @@
             // 
             // txtDocNumber
             // 
-            this.txtDocNumber.Location = new System.Drawing.Point(112, 31);
+            this.txtDocNumber.Location = new System.Drawing.Point(112, 13);
             this.txtDocNumber.Name = "txtDocNumber";
             this.txtDocNumber.Size = new System.Drawing.Size(200, 20);
             this.txtDocNumber.TabIndex = 9;
@@ -260,7 +263,7 @@
             // lblDocType
             // 
             this.lblDocType.AutoSize = true;
-            this.lblDocType.Location = new System.Drawing.Point(10, 60);
+            this.lblDocType.Location = new System.Drawing.Point(10, 39);
             this.lblDocType.Name = "lblDocType";
             this.lblDocType.Size = new System.Drawing.Size(83, 13);
             this.lblDocType.TabIndex = 10;
@@ -272,7 +275,7 @@
             this.cmbDocType.Items.AddRange(new object[] {
             "POD",
             "INV"});
-            this.cmbDocType.Location = new System.Drawing.Point(112, 57);
+            this.cmbDocType.Location = new System.Drawing.Point(112, 36);
             this.cmbDocType.Name = "cmbDocType";
             this.cmbDocType.Size = new System.Drawing.Size(121, 21);
             this.cmbDocType.TabIndex = 11;
@@ -289,9 +292,9 @@
             this.lblDate.AutoSize = true;
             this.lblDate.Location = new System.Drawing.Point(10, 84);
             this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(78, 13);
+            this.lblDate.Size = new System.Drawing.Size(49, 13);
             this.lblDate.TabIndex = 13;
-            this.lblDate.Text = "Date Delivered";
+            this.lblDate.Text = "GR Date";
             // 
             // btnProcess
             // 
@@ -307,6 +310,8 @@
             // 
             // grpBoxDocInfo
             // 
+            this.grpBoxDocInfo.Controls.Add(this.txtBoxGRNumber);
+            this.grpBoxDocInfo.Controls.Add(this.label1);
             this.grpBoxDocInfo.Controls.Add(this.txtDocNumber);
             this.grpBoxDocInfo.Controls.Add(this.lblDocNumber);
             this.grpBoxDocInfo.Controls.Add(this.lblDate);
@@ -432,7 +437,6 @@
             this.MainStatusStrip.Size = new System.Drawing.Size(971, 22);
             this.MainStatusStrip.TabIndex = 23;
             this.MainStatusStrip.Text = "statusStrip1";
-            this.MainStatusStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.MainStatusStrip_ItemClicked);
             // 
             // DateLabel
             // 
@@ -590,6 +594,22 @@
             this.btnAddPage.Visible = false;
             this.btnAddPage.Click += new System.EventHandler(this.btnAddPage_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 61);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(63, 13);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "GR Number";
+            // 
+            // txtBoxGRNumber
+            // 
+            this.txtBoxGRNumber.Location = new System.Drawing.Point(112, 61);
+            this.txtBoxGRNumber.Name = "txtBoxGRNumber";
+            this.txtBoxGRNumber.Size = new System.Drawing.Size(200, 20);
+            this.txtBoxGRNumber.TabIndex = 15;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -619,14 +639,13 @@
             this.Controls.Add(this.picBoxEnlarged);
             this.Controls.Add(this.btnScan);
             this.Controls.Add(this.Menu);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(100, 150);
             this.MainMenuStrip = this.Menu;
             this.MaximumSize = new System.Drawing.Size(987, 525);
             this.MinimumSize = new System.Drawing.Size(987, 525);
             this.Name = "frmMain";
             this.Text = "RCL Scanner";
-            this.Load += new System.EventHandler(this.frmMain_Load);
+            this.Load += new System.EventHandler(this.frmMain_LoadAsync);
             this.Menu.ResumeLayout(false);
             this.Menu.PerformLayout();
             this.grpBoxPageSize.ResumeLayout(false);
@@ -702,6 +721,8 @@
         private System.Windows.Forms.Button btnRotate;
         private System.Windows.Forms.Button btnRotateAnti;
         private System.Windows.Forms.Button btnAddPage;
+        private System.Windows.Forms.TextBox txtBoxGRNumber;
+        private System.Windows.Forms.Label label1;
     }
 }
 

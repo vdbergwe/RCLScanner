@@ -39,7 +39,7 @@ namespace RCLScanner
         private extern static bool CloseHandle(IntPtr handle);
 
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
-        public static void Impersonate(string domainName, string userName, string userPassword, Action actionToExecute)
+        public static void Impersonate(string domainName, string userName, string userPassword, string Path, Action<string> actionToExecute)
         {
             SafeTokenHandle safeTokenHandle;
             try
@@ -76,7 +76,7 @@ namespace RCLScanner
                             //Facade.Instance.Trace($"After impersonation: {WindowsIdentity.GetCurrent().Name}");
                             //Facade.Instance.Trace("Start executing an action");
 
-                            actionToExecute();
+                            actionToExecute.Invoke(Path);
 
                             //Facade.Instance.Trace("Finished executing an action");
                         }
