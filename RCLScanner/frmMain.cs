@@ -910,38 +910,7 @@ namespace RCLScanner
                                         Console.WriteLine("Error uploading file: " + ex.Message);
                                         Console.WriteLine(UploadDirectory + " - " + Username + " - " + Password);
                                     }
-
-
-
-                                    //// Set the network credentials for authentication
-                                    //NetworkCredential credentials = new NetworkCredential(Username, Password);
-
-                                    //// Create a new WebClient and assign the credentials                                
-
-                                    //using (WebClient client = new WebClient())
-                                    //{
-                                    //    client.Credentials = credentials;
-
-                                    //    try
-                                    //    {
-                                    //        // Upload the file to the file share
-                                    //        client.UploadFile(UploadDirectory + "\\" + OriginalFilename + ".pdf", "PUT", file);
-                                    //        File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
-                                    //        Console.WriteLine("File uploaded successfully.");
-                                    //        MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf");
-
-                                    //    }
-                                    //    catch (Exception ex)
-                                    //    {
-                                    //        Console.WriteLine("Error uploading file: " + ex.Message);
-                                    //        Console.WriteLine(Username + " - " + Password);
-
-                                    //    }
-                                    //}
-                                }
-
-
-                               
+                                }                               
                             }
                         }
                         catch(Exception ex)
