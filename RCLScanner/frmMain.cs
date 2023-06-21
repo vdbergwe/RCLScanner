@@ -873,39 +873,46 @@ namespace RCLScanner
                                             Ip = ip2.ToString();
                                         }
                                     }
-                                }                                
+                                }
 
-                                
-                                //ImpersonationHelper.Impersonate("tsb.co.za", Username, Password , UploadDirectory, fileSharePath =>
-                                //{
-                                //    //Upload to Online Repository
-                                //    File.Copy(file, UploadDirectory + "\\" + OriginalFilename + ".pdf");
-                                //});
-                                ////Move file to Archive location
-                                //File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
-
-                                // Set the network credentials for authentication
-                                NetworkCredential credentials = new NetworkCredential(Username, Password);
-
-                                // Create a new WebClient and assign the credentials
-                                using (WebClient client = new WebClient())
+                                try
                                 {
-                                    client.Credentials = credentials;
+                                    ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, UploadDirectory, fileSharePath =>
+                                   {
+                                        //Upload to Online Repository
+                                        File.Copy(file, UploadDirectory + "\\" + OriginalFilename + ".pdf");
+                                   });
+                                    //Move file to Archive location
+                                    File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
+                                }
+                                catch 
+                                {
+                                    // Set the network credentials for authentication
+                                    NetworkCredential credentials = new NetworkCredential(Username, Password);
 
-                                    try
+                                    // Create a new WebClient and assign the credentials
+                                    using (WebClient client = new WebClient())
                                     {
-                                        // Upload the file to the file share
-                                        client.UploadFile(UploadDirectory + "\\" + OriginalFilename + ".pdf", "PUT", file);
-                                        File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
-                                        Console.WriteLine("File uploaded successfully.");
-                                        MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf");
+                                        client.Credentials = credentials;
 
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine("Error uploading file: " + ex.Message);
+                                        try
+                                        {
+                                            // Upload the file to the file share
+                                            client.UploadFile(UploadDirectory + "\\" + OriginalFilename + ".pdf", "PUT", file);
+                                            File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
+                                            Console.WriteLine("File uploaded successfully.");
+                                            MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf");
+
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Console.WriteLine("Error uploading file: " + ex.Message);
+                                        }
                                     }
                                 }
+
+
+                               
                             }
                         }
                         catch(Exception ex)
