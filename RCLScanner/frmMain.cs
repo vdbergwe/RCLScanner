@@ -887,28 +887,57 @@ namespace RCLScanner
                                 }
                                 catch 
                                 {
-                                    // Set the network credentials for authentication
-                                    NetworkCredential credentials = new NetworkCredential(Username, Password);
 
-                                    // Create a new WebClient and assign the credentials
-                                    using (WebClient client = new WebClient())
+                                    try
                                     {
-                                        client.Credentials = credentials;
-
-                                        try
+                                        bool isConnected = NetworkShareConnector.ConnectToNetworkShare(UploadDirectory, Username, Password);
+                                        if (isConnected)
                                         {
-                                            // Upload the file to the file share
-                                            client.UploadFile(UploadDirectory + "\\" + OriginalFilename + ".pdf", "PUT", file);
+                                            // Perform operations on the network share...
+                                            File.Copy(file, UploadDirectory + "\\" + OriginalFilename + ".pdf");
                                             File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
-                                            Console.WriteLine("File uploaded successfully.");
                                             MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf");
+                                            Console.WriteLine("File uploaded successfully.");
 
+                                            NetworkShareConnector.DisconnectFromNetworkShare(UploadDirectory);
                                         }
-                                        catch (Exception ex)
-                                        {
-                                            Console.WriteLine("Error uploading file: " + ex.Message);
-                                        }
+
+                                        Console.ReadLine();
+                                        
                                     }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine("Error uploading file: " + ex.Message);
+                                        Console.WriteLine(UploadDirectory + " - " + Username + " - " + Password);
+                                    }
+
+
+
+                                    //// Set the network credentials for authentication
+                                    //NetworkCredential credentials = new NetworkCredential(Username, Password);
+
+                                    //// Create a new WebClient and assign the credentials                                
+
+                                    //using (WebClient client = new WebClient())
+                                    //{
+                                    //    client.Credentials = credentials;
+
+                                    //    try
+                                    //    {
+                                    //        // Upload the file to the file share
+                                    //        client.UploadFile(UploadDirectory + "\\" + OriginalFilename + ".pdf", "PUT", file);
+                                    //        File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
+                                    //        Console.WriteLine("File uploaded successfully.");
+                                    //        MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf");
+
+                                    //    }
+                                    //    catch (Exception ex)
+                                    //    {
+                                    //        Console.WriteLine("Error uploading file: " + ex.Message);
+                                    //        Console.WriteLine(Username + " - " + Password);
+
+                                    //    }
+                                    //}
                                 }
 
 

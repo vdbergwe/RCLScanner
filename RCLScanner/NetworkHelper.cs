@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Diagnostics;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -10,6 +12,92 @@ using Microsoft.Win32.SafeHandles;
 
 namespace RCLScanner
 {
+
+    public class NetworkShareConnector
+    {
+        public static bool ConnectToNetworkShare(string sharePath, string username, string password)
+        {
+            try
+            {
+                Process process = new Process();
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+
+                startInfo.FileName = "net";
+                startInfo.Arguments = $"use {sharePath} /user:{username} {password}";
+                startInfo.CreateNoWindow = true;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardError = true;
+                startInfo.UseShellExecute = false;
+
+                process.StartInfo = startInfo;
+                process.Start();
+                process.WaitForExit();
+
+                int exitCode = process.ExitCode;
+                string output = process.StandardOutput.ReadToEnd();
+                string error = process.StandardError.ReadToEnd();
+
+                if (exitCode == 0)
+                {
+                    Console.WriteLine("Connected to network share: " + sharePath);
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Failed to connect to network share: " + sharePath);
+                    Console.WriteLine("Error: " + error);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error connecting to network share: " + ex.Message);
+                return false;
+            }
+        }
+
+        public static void DisconnectFromNetworkShare(string sharePath)
+        {
+            try
+            {
+                Process process = new Process();
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+
+                startInfo.FileName = "net";
+                startInfo.Arguments = $"use {sharePath} /delete";
+                startInfo.CreateNoWindow = true;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardError = true;
+                startInfo.UseShellExecute = false;
+
+                process.StartInfo = startInfo;
+                process.Start();
+                process.WaitForExit();
+
+                int exitCode = process.ExitCode;
+                string output = process.StandardOutput.ReadToEnd();
+                string error = process.StandardError.ReadToEnd();
+
+                if (exitCode == 0)
+                {
+                    Console.WriteLine("Disconnected from network share: " + sharePath);
+                }
+                else
+                {
+                    Console.WriteLine("Failed to disconnect from network share: " + sharePath);
+                    Console.WriteLine("Error: " + error);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error disconnecting from network share: " + ex.Message);
+            }
+        }
+    }
+
+
+
+
     public sealed class SafeTokenHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         private SafeTokenHandle()
