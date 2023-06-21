@@ -78,10 +78,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>AC47A07A957AD015879622CC598744555D1648BB</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>D2E8C12458367F094FA9CE22FC34694EA8F11DD3</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>RCLScanner_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>RCLScanner_3_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -98,6 +98,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>RCLScanner.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
@@ -240,6 +243,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="RCLScanner_3_TemporaryKey.pfx" />
     <None Include="zzPODScanDBDataSet.xsc">
       <DependentUpon>zzPODScanDBDataSet.xsd</DependentUpon>
     </None>

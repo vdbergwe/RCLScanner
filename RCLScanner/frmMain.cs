@@ -724,7 +724,6 @@ namespace RCLScanner
                     }
                 }
 
-                MyDataInstance.Publish(padding + txtDocNumber.Text, txtBoxGRNumber.Text, dtpDate.Value, System.Environment.MachineName, System.Environment.UserName, Ip, newfilename);
 
                 ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, UploadDirectory, fileSharePath =>
                 {
@@ -733,6 +732,34 @@ namespace RCLScanner
                 });
                 //Move file to History location
                 File.Move(ScanDirectory + "\\" + newfilename, HistoryDirectory + "\\" + newfilename);
+                MyDataInstance.Publish(padding + txtDocNumber.Text, txtBoxGRNumber.Text, dtpDate.Value, System.Environment.MachineName, System.Environment.UserName, Ip, newfilename);
+
+
+
+                //// Set the network credentials for authentication
+                //NetworkCredential credentials = new NetworkCredential(Username, Password);
+
+                //// Create a new WebClient and assign the credentials
+                //using (WebClient client = new WebClient())
+                //{
+                //    client.Credentials = credentials;
+
+                //    try
+                //    {
+                //        // Upload the file to the file share
+                //        client.UploadFile(UploadDirectory, "PUT", ScanDirectory + "\\" + newfilename);
+                //        File.Move(ScanDirectory + "\\" + newfilename, HistoryDirectory + "\\" + newfilename);
+                //        Console.WriteLine("File uploaded successfully.");
+                //        MyDataInstance.Publish(padding + txtDocNumber.Text, txtBoxGRNumber.Text, dtpDate.Value, System.Environment.MachineName, System.Environment.UserName, Ip, newfilename);
+
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        Console.WriteLine("Error uploading file: " + ex.Message);
+                //    }
+                //}
+
+
                 LoadFiles();
                 picBoxEnlarged.Image = Resources.Completed400;
                 txtDocNumber.Text = null;
@@ -848,20 +875,42 @@ namespace RCLScanner
                                     }
                                 }                                
 
-                                MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf");
-                                                      
-                                ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, UploadDirectory, fileSharePath =>
+                                
+                                //ImpersonationHelper.Impersonate("tsb.co.za", Username, Password , UploadDirectory, fileSharePath =>
+                                //{
+                                //    //Upload to Online Repository
+                                //    File.Copy(file, UploadDirectory + "\\" + OriginalFilename + ".pdf");
+                                //});
+                                ////Move file to Archive location
+                                //File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
+
+                                // Set the network credentials for authentication
+                                NetworkCredential credentials = new NetworkCredential(Username, Password);
+
+                                // Create a new WebClient and assign the credentials
+                                using (WebClient client = new WebClient())
                                 {
-                                    //Upload to Online Repository
-                                    File.Copy(file, UploadDirectory + "\\" + OriginalFilename + ".pdf");
-                                });
-                                //Move file to Archive location
-                                File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
+                                    client.Credentials = credentials;
+
+                                    try
+                                    {
+                                        // Upload the file to the file share
+                                        client.UploadFile(UploadDirectory + "\\" + OriginalFilename + ".pdf", "PUT", file);
+                                        File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
+                                        Console.WriteLine("File uploaded successfully.");
+                                        MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf");
+
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine("Error uploading file: " + ex.Message);
+                                    }
+                                }
                             }
                         }
                         catch(Exception ex)
                         {
-                            //MessageBox.Show(ex.ToString());
+                            //MessageBox.Show(ex.ToString() + " - " + Username + " - " + Password);
                         }
 
                     }
