@@ -890,7 +890,7 @@ namespace RCLScanner
 
                                     try
                                     {
-                                        bool isConnected = NetworkShareConnector.ConnectToNetworkShare(UploadDirectory, Username, Password);
+                                        bool isConnected = NetworkShareConnector.ConnectToNetworkShare(UploadDirectory, "tsb.co.za\\" + Username, Password);
                                         if (isConnected)
                                         {
                                             // Perform operations on the network share...
