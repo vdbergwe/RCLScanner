@@ -52,7 +52,7 @@ namespace RCLScanner
         // Create a new Ping object
         Ping ping = new Ping();
 
-        string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\RCLScanner\LocalDB.mdf;Integrated Security=True;Connect Timeout=30";
+        string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=\LocalDB.mdf;Integrated Security=True;Connect Timeout=30";
 
         private void LoadFiles()
         {
@@ -190,6 +190,7 @@ namespace RCLScanner
         public frmMain()
         {
             InitializeComponent();
+            picBoxRCLLogo.Image = Resources.RCL_Logo_0420232;
             this.Left = 100;
             this.Top = 150;
         }
@@ -968,6 +969,11 @@ namespace RCLScanner
         private void btnAddPage_Click(object sender, EventArgs e)
         {           
             btnScan_Click(sender, e);
+        }
+
+        private void grpBoxDocInfo_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 

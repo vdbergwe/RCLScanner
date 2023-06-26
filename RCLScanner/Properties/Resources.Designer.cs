@@ -71,12 +71,12 @@ namespace RCLScanner.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] LocalDB {
+        internal static System.Drawing.Bitmap RCL_Logo_0420232 {
             get {
-                object obj = ResourceManager.GetObject("LocalDB", resourceCulture);
-                return ((byte[])(obj));
+                object obj = ResourceManager.GetObject("RCL_Logo_0420232", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

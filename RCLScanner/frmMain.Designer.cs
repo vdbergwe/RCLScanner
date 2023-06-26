@@ -53,6 +53,8 @@
             this.lblDate = new System.Windows.Forms.Label();
             this.btnProcess = new System.Windows.Forms.Button();
             this.grpBoxDocInfo = new System.Windows.Forms.GroupBox();
+            this.txtBoxGRNumber = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.ButtonContainer = new System.Windows.Forms.GroupBox();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.chkBoxUseADF = new System.Windows.Forms.CheckBox();
@@ -79,8 +81,6 @@
             this.btnRotate = new System.Windows.Forms.Button();
             this.btnRotateAnti = new System.Windows.Forms.Button();
             this.btnAddPage = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtBoxGRNumber = new System.Windows.Forms.TextBox();
             this.Menu.SuspendLayout();
             this.grpBoxPageSize.SuspendLayout();
             this.grpBoxResolution.SuspendLayout();
@@ -324,6 +324,23 @@
             this.grpBoxDocInfo.TabIndex = 16;
             this.grpBoxDocInfo.TabStop = false;
             this.grpBoxDocInfo.Text = "Document Information";
+            this.grpBoxDocInfo.Enter += new System.EventHandler(this.grpBoxDocInfo_Enter);
+            // 
+            // txtBoxGRNumber
+            // 
+            this.txtBoxGRNumber.Location = new System.Drawing.Point(112, 61);
+            this.txtBoxGRNumber.Name = "txtBoxGRNumber";
+            this.txtBoxGRNumber.Size = new System.Drawing.Size(200, 20);
+            this.txtBoxGRNumber.TabIndex = 15;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 61);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(63, 13);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "GR Number";
             // 
             // ButtonContainer
             // 
@@ -383,10 +400,11 @@
             // 
             // picBoxRCLLogo
             // 
-            this.picBoxRCLLogo.Image = global::RCLScanner.Properties.Resources.RCL_Logo_04202321;
+            this.picBoxRCLLogo.ErrorImage = null;
+            this.picBoxRCLLogo.InitialImage = null;
             this.picBoxRCLLogo.Location = new System.Drawing.Point(12, 215);
             this.picBoxRCLLogo.Name = "picBoxRCLLogo";
-            this.picBoxRCLLogo.Size = new System.Drawing.Size(150, 254);
+            this.picBoxRCLLogo.Size = new System.Drawing.Size(157, 254);
             this.picBoxRCLLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picBoxRCLLogo.TabIndex = 7;
             this.picBoxRCLLogo.TabStop = false;
@@ -593,22 +611,6 @@
             this.btnAddPage.UseVisualStyleBackColor = false;
             this.btnAddPage.Visible = false;
             this.btnAddPage.Click += new System.EventHandler(this.btnAddPage_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 61);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(63, 13);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "GR Number";
-            // 
-            // txtBoxGRNumber
-            // 
-            this.txtBoxGRNumber.Location = new System.Drawing.Point(112, 61);
-            this.txtBoxGRNumber.Name = "txtBoxGRNumber";
-            this.txtBoxGRNumber.Size = new System.Drawing.Size(200, 20);
-            this.txtBoxGRNumber.TabIndex = 15;
             // 
             // frmMain
             // 
