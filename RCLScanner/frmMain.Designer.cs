@@ -401,6 +401,7 @@
             // picBoxRCLLogo
             // 
             this.picBoxRCLLogo.ErrorImage = null;
+            this.picBoxRCLLogo.Image = global::RCLScanner.Properties.Resources.RCL_Logo_0420232;
             this.picBoxRCLLogo.InitialImage = null;
             this.picBoxRCLLogo.Location = new System.Drawing.Point(12, 215);
             this.picBoxRCLLogo.Name = "picBoxRCLLogo";

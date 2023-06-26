@@ -273,9 +273,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="RCLScanner_1_TemporaryKey.pfx" />
-    <None Include="Resources\RCL_Logo_0420232.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="PODScanDB.Context.tt">
@@ -289,15 +286,10 @@
       <LastGenOutput>PODScanDB.cs</LastGenOutput>
     </Content>
     <Content Include="RCL_Logo_0420232.ico" />
-    <None Include="Resources\Waiting400.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\SelectFile400.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\Completed400.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Content Include="Resources\Completed400.jpg" />
+    <Content Include="Resources\RCL_Logo_0420232.png" />
+    <Content Include="Resources\SelectFile400.jpg" />
+    <Content Include="Resources\Waiting400.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
