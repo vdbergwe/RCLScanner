@@ -39,11 +39,13 @@ namespace RCLScanner
 
                 if (exitCode == 0)
                 {
+                    Console.WriteLine(startInfo.Arguments);
                     Console.WriteLine("Connected to network share: " + sharePath);
                     return true;
                 }
                 else
                 {
+                    Console.WriteLine(startInfo.Arguments);
                     Console.WriteLine("Failed to connect to network share: " + sharePath);
                     Console.WriteLine("Error: " + error);
                     return false;

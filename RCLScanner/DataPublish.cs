@@ -17,7 +17,7 @@ namespace RCLScanner
     {
 
 
-        public async void Publish(string UpVbeln, string UpGRNumber, DateTime UpGRDate, string UpComputerName, string UpUsername, string UpIP, string UpDocumentName) {
+        public async void Publish(string UpVbeln, string UpGRNumber, DateTime UpGRDate, string UpComputerName, string UpUsername, string UpIP, string UpDocumentName, string SDocType) {
             try
             {
                 string url = "https://rclmlsdash01.tsb.co.za/Fetch/SetLog";
@@ -39,7 +39,8 @@ namespace RCLScanner
                     SyncDate = DateTime.Now,
                     SyncTime = DateTime.Now,
                     DocumentName = UpDocumentName,
-                    UserDomain = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName
+                    UserDomain = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName,
+                    DocType = SDocType
                 };
 
                 // Convert the object to a JSON string

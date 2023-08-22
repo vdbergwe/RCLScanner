@@ -23,12 +23,14 @@ using System.Windows.Markup;
 using static System.Data.Entity.Infrastructure.Design.Executor;
 using System.Net.Sockets;
 using System.Security.Principal;
+using System.Security.Policy;
 
 namespace RCLScanner
 {
     public partial class frmMain : Form
     {
-        string url = "https://rclmlsdash01.tsb.co.za/Fetch/Get_GlobalConfig?System=TSH";
+        //string url = "https://rclmlsdash01.tsb.co.za/Fetch/Get_GlobalConfig?System=TSH";
+        string url = "https://localhost:44361/Fetch/Get_GlobalConfig?System=TSH";
         string SelectedFile;
         string SelectedButton;
         string ScanDirectory;
@@ -36,11 +38,15 @@ namespace RCLScanner
         string PendingDirectory;
         string UploadDirectory;
         string HistoryDirectory;
+        string ReplDirectory;
+        string OnlineHistoryDirectory;
         string Username;
         string Password;
         int Width = 0;
         int Height = 0;
         int Resolution = 0;
+        int FilesInHistory = 0;
+        int FilesChecked = 0;
         bool errorFlag = false;
         bool flash = false;       
 
@@ -581,6 +587,8 @@ namespace RCLScanner
                 PendingDirectory = data.PendingFolder;
                 UploadDirectory = data.RepositoryPath;
                 HistoryDirectory = data.HistoryFolder;
+                ReplDirectory = data.ReplDirectory;
+                OnlineHistoryDirectory = data.OnlineHistoryDirectory;
                 Username = data.RepositoryUserName; 
                 Password = data.RepositoryPassword;
 
@@ -590,8 +598,12 @@ namespace RCLScanner
                 ScanDirectory = "C:\\RCLScanner\\Scans";
                 WorkDirectory = "C:\\RCLScanner\\Work";
                 PendingDirectory = "C:\\RCLScanner\\Pending";
-                UploadDirectory = "\\\\SRSM083A\\14_PODCentral\\Consolidation\\TQA\\021";
+                UploadDirectory = "\\\\SRSM083A.tsb.co.za\\14_PODCentral\\Consolidation\\TSH\\021";            
+                ReplDirectory = "\\\\SRSM083A.tsb.co.za\\14_PODCentral\\Consolidation\\TSH\\021\\ReplPOD";
                 HistoryDirectory = "C:\\RCLScanner\\History";
+                OnlineHistoryDirectory = "\\\\rclmlsdash01\\OnlineHistory\\POD";
+                Username = "srvacc_sdashintegration";
+                Password = "Th1s1s@serv1ce@ccount@Sdash";
 
                 if (Directory.Exists("C:\\RCLScanner"))
                 {
@@ -659,7 +671,7 @@ namespace RCLScanner
             {
                 btnScan.Enabled = false;
                 btnScan.BackColor = Color.Orange;
-                errorFlag = true;
+                //errorFlag = true;
                 StatusLabel.Text = "NO SCANNER CONNECTED";
             }
             else
@@ -725,40 +737,29 @@ namespace RCLScanner
                     }
                 }
 
-
-                ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, UploadDirectory, fileSharePath =>
+                if (cmbDocType.SelectedItem.ToString() == "REPL_POD") 
                 {
-                    //Upload to Online Repository
-                    File.Copy(ScanDirectory + "\\" + newfilename, UploadDirectory + "\\" + newfilename);
-                });
-                //Move file to History location
-                File.Move(ScanDirectory + "\\" + newfilename, HistoryDirectory + "\\" + newfilename);
-                MyDataInstance.Publish(padding + txtDocNumber.Text, txtBoxGRNumber.Text, dtpDate.Value, System.Environment.MachineName, System.Environment.UserName, Ip, newfilename);
+                    ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, ReplDirectory, fileSharePath =>
+                    {
+                        //Upload to Online Repository
+                        File.Copy(ScanDirectory + "\\" + newfilename, ReplDirectory + "\\" + newfilename);
+                    });
+                    //Move file to History location
+                    File.Move(ScanDirectory + "\\" + newfilename, HistoryDirectory + "\\" + newfilename);
+                    MyDataInstance.Publish(padding + txtDocNumber.Text, txtBoxGRNumber.Text, dtpDate.Value, System.Environment.MachineName, System.Environment.UserName, Ip, newfilename, cmbDocType.SelectedItem.ToString());
 
-
-
-                //// Set the network credentials for authentication
-                //NetworkCredential credentials = new NetworkCredential(Username, Password);
-
-                //// Create a new WebClient and assign the credentials
-                //using (WebClient client = new WebClient())
-                //{
-                //    client.Credentials = credentials;
-
-                //    try
-                //    {
-                //        // Upload the file to the file share
-                //        client.UploadFile(UploadDirectory, "PUT", ScanDirectory + "\\" + newfilename);
-                //        File.Move(ScanDirectory + "\\" + newfilename, HistoryDirectory + "\\" + newfilename);
-                //        Console.WriteLine("File uploaded successfully.");
-                //        MyDataInstance.Publish(padding + txtDocNumber.Text, txtBoxGRNumber.Text, dtpDate.Value, System.Environment.MachineName, System.Environment.UserName, Ip, newfilename);
-
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        Console.WriteLine("Error uploading file: " + ex.Message);
-                //    }
-                //}
+                }
+                else
+                {
+                    ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, UploadDirectory, fileSharePath =>
+                    {
+                        //Upload to Online Repository
+                        File.Copy(ScanDirectory + "\\" + newfilename, UploadDirectory + "\\" + newfilename);
+                    });
+                    //Move file to History location
+                    File.Move(ScanDirectory + "\\" + newfilename, HistoryDirectory + "\\" + newfilename);
+                    MyDataInstance.Publish(padding + txtDocNumber.Text, txtBoxGRNumber.Text, dtpDate.Value, System.Environment.MachineName, System.Environment.UserName, Ip, newfilename, cmbDocType.SelectedItem.ToString());
+                }
 
 
                 LoadFiles();
@@ -769,7 +770,7 @@ namespace RCLScanner
             catch
             {
                 newfilename = newfilename.Substring(0, 25);
-                File.Move(ScanDirectory + "\\" + newfilename + ".pdf", PendingDirectory + "\\" + newfilename + "_" + txtBoxGRNumber.Text + "_" + dtpDate.Value.ToString("yyyyMMddHHmmss") + ".pdf");
+                File.Move(ScanDirectory + "\\" + newfilename + ".pdf", PendingDirectory + "\\" + cmbDocType.SelectedItem.ToString() + "_" + newfilename + "_" + txtBoxGRNumber.Text + "_" + dtpDate.Value.ToString("yyyyMMddHHmmss") + ".pdf");
                 //MessageBox.Show("Cant Connect");
                 picBoxEnlarged.Image = Resources.Waiting400;
                 txtDocNumber.Text = null;
@@ -844,6 +845,22 @@ namespace RCLScanner
                             {
                                 var MyDataInstance = new DataPublish();
                                 var FileName = System.IO.Path.GetFileName(file.ToUpper());
+                                var DocType = "";
+                                var DocTypeUploadDirectory = UploadDirectory;
+
+                                if (FileName.Substring(0, 8) == "REPL_POD") 
+                                {
+                                    DocType = FileName.Substring(0,8);
+                                    FileName = FileName.Remove(0, 9);
+                                    DocTypeUploadDirectory = ReplDirectory;
+                                }
+                                else
+                                {
+                                    DocType = FileName.Substring(0, 3);
+                                    FileName = FileName.Remove(0, 4);
+                                }
+                                Console.WriteLine(DocTypeUploadDirectory + " - " + Username + " - " + Password);
+
 
                                 var PODNumber = FileName.Substring(0, 10);
                                 var OriginalFilename = FileName.Substring(0, 25);
@@ -878,29 +895,31 @@ namespace RCLScanner
 
                                 try
                                 {
-                                    ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, UploadDirectory, fileSharePath =>
+                                    ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, DocTypeUploadDirectory, fileSharePath =>
                                    {
                                         //Upload to Online Repository
-                                        File.Copy(file, UploadDirectory + "\\" + OriginalFilename + ".pdf");
+                                        File.Copy(file, DocTypeUploadDirectory + "\\" + OriginalFilename + ".pdf");
                                    });
+            
                                     //Move file to Archive location
                                     File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
+                                    MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf", DocType);
                                 }
                                 catch 
                                 {
 
                                     try
                                     {
-                                        bool isConnected = NetworkShareConnector.ConnectToNetworkShare(UploadDirectory, "tsb.co.za\\" + Username, Password);
+                                        bool isConnected = NetworkShareConnector.ConnectToNetworkShare(DocTypeUploadDirectory, "tsb.co.za\\" + Username, Password);
                                         if (isConnected)
                                         {
                                             // Perform operations on the network share...
-                                            File.Copy(file, UploadDirectory + "\\" + OriginalFilename + ".pdf");
+                                            File.Copy(file, DocTypeUploadDirectory + "\\" + OriginalFilename + ".pdf");
                                             File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
-                                            MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf");
+                                            MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf", DocType);
                                             Console.WriteLine("File uploaded successfully.");
 
-                                            NetworkShareConnector.DisconnectFromNetworkShare(UploadDirectory);
+                                            NetworkShareConnector.DisconnectFromNetworkShare(DocTypeUploadDirectory);
                                         }
 
                                         Console.ReadLine();
@@ -909,12 +928,72 @@ namespace RCLScanner
                                     catch (Exception ex)
                                     {
                                         Console.WriteLine("Error uploading file: " + ex.Message);
-                                        Console.WriteLine(UploadDirectory + " - " + Username + " - " + Password);
+                                        Console.WriteLine(DocTypeUploadDirectory + " - " + Username + " - " + Password);
                                     }
                                 }                               
                             }
                         }
-                        catch(Exception ex)
+                        catch
+                        { 
+                            //MessageBox.Show(ex.ToString() + " - " + Username + " - " + Password);
+                        }
+
+
+                        try
+                        {
+                            string[] fileNames = Directory.GetFiles(HistoryDirectory);
+
+                            FilesInHistory = fileNames.Count();
+
+                            if (FilesInHistory != FilesChecked) 
+                            {
+                                foreach (var file in fileNames)
+                                {
+                                    FilesChecked++;
+                                    try
+                                    {
+                                        ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, OnlineHistoryDirectory, fileSharePath =>
+                                        {
+                                            if (System.IO.File.Exists(OnlineHistoryDirectory + "\\" + System.IO.Path.GetFileName(file.ToUpper())))
+                                            {
+                                                Console.WriteLine("File in OnlineHistory Directory: " + System.IO.Path.GetFileName(file.ToUpper()).ToString());
+                                            }
+                                            else
+                                            {
+                                                File.Copy(file, OnlineHistoryDirectory + "\\" + System.IO.Path.GetFileName(file.ToUpper()));
+                                            }
+                                        });
+                                    }
+                                    catch
+                                    {
+
+                                        try
+                                        {
+                                            bool isConnected = NetworkShareConnector.ConnectToNetworkShare(OnlineHistoryDirectory, "tsb.co.za\\" + Username, Password);
+                                            if (isConnected)
+                                            {
+                                                if (System.IO.File.Exists(OnlineHistoryDirectory + "\\" + System.IO.Path.GetFileName(file.ToUpper())))
+                                                {
+                                                    Console.WriteLine("File in OnlineHistory Directory: " + System.IO.Path.GetFileName(file.ToUpper()).ToString());
+                                                }
+                                                else
+                                                {
+                                                    File.Copy(file, OnlineHistoryDirectory + "\\" + System.IO.Path.GetFileName(file.ToUpper()));
+                                                }
+                                                NetworkShareConnector.DisconnectFromNetworkShare(OnlineHistoryDirectory);
+                                            }
+                                            Console.ReadLine();
+                                        }
+                                        catch
+                                        {
+                                        }
+                                    }
+                                }
+                            }
+                            else { Console.WriteLine("All Files In Online History"); }
+                            
+                        }
+                        catch 
                         {
                             //MessageBox.Show(ex.ToString() + " - " + Username + " - " + Password);
                         }
@@ -989,6 +1068,8 @@ namespace RCLScanner
         public string PendingFolder { get; set; }
         public string HistoryFolder { get; set; }
         public string Validation { get; set; }
+        public string ReplDirectory { get; set; }
+        public string OnlineHistoryDirectory { get; set; }
     }
 
 }
