@@ -598,7 +598,7 @@ namespace RCLScanner
                 ScanDirectory = "C:\\RCLScanner\\Scans";
                 WorkDirectory = "C:\\RCLScanner\\Work";
                 PendingDirectory = "C:\\RCLScanner\\Pending";
-                UploadDirectory = "\\\\SRSM083A.tsb.co.za\\14_PODCentral\\Consolidation\\TSH\\021";            
+                UploadDirectory = "\\\\SRSM083A.tsb.co.za\\14_PODCentral\\Consolidation\\TSH\\021\\Holding";            
                 ReplDirectory = "\\\\SRSM083A.tsb.co.za\\14_PODCentral\\Consolidation\\TSH\\021\\ReplPOD";
                 HistoryDirectory = "C:\\RCLScanner\\History";
                 OnlineHistoryDirectory = "\\\\rclmlsdash01.tsb.co.za\\OnlineHistory\\POD";

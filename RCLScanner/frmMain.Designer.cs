@@ -286,7 +286,7 @@
             this.dtpDate.Location = new System.Drawing.Point(112, 84);
             this.dtpDate.Name = "dtpDate";
             this.dtpDate.Size = new System.Drawing.Size(200, 20);
-            this.dtpDate.TabIndex = 12;
+            this.dtpDate.TabIndex = 13;
             // 
             // lblDate
             // 
@@ -332,7 +332,7 @@
             this.txtBoxGRNumber.Location = new System.Drawing.Point(112, 61);
             this.txtBoxGRNumber.Name = "txtBoxGRNumber";
             this.txtBoxGRNumber.Size = new System.Drawing.Size(200, 20);
-            this.txtBoxGRNumber.TabIndex = 15;
+            this.txtBoxGRNumber.TabIndex = 12;
             // 
             // label1
             // 
