@@ -601,7 +601,7 @@ namespace RCLScanner
                 UploadDirectory = "\\\\SRSM083A.tsb.co.za\\14_PODCentral\\Consolidation\\TSH\\021";            
                 ReplDirectory = "\\\\SRSM083A.tsb.co.za\\14_PODCentral\\Consolidation\\TSH\\021\\ReplPOD";
                 HistoryDirectory = "C:\\RCLScanner\\History";
-                OnlineHistoryDirectory = "\\\\rclmlsdash01\\OnlineHistory\\POD";
+                OnlineHistoryDirectory = "\\\\rclmlsdash01.tsb.co.za\\OnlineHistory\\POD";
                 Username = "srvacc_sdashintegration";
                 Password = "Th1s1s@serv1ce@ccount@Sdash";
 
@@ -702,6 +702,7 @@ namespace RCLScanner
             dtpDate.Enabled = false;
             btnProcess.Enabled = false;
             string padding = "";
+            FilesChecked = 0;
             for (int i = 1; i <= (10 - txtDocNumber.Text.Length); i++)
             {
                 padding = padding + "0";
