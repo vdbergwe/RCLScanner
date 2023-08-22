@@ -29,8 +29,8 @@ namespace RCLScanner
 {
     public partial class frmMain : Form
     {
-        //string url = "https://rclmlsdash01.tsb.co.za/Fetch/Get_GlobalConfig?System=TSH";
-        string url = "https://localhost:44361/Fetch/Get_GlobalConfig?System=TSH";
+        string url = "https://rclmlsdash01.tsb.co.za/Fetch/Get_GlobalConfig?System=TSH";
+        //string url = "https://localhost:44361/Fetch/Get_GlobalConfig?System=TSH";
         string SelectedFile;
         string SelectedButton;
         string ScanDirectory;
