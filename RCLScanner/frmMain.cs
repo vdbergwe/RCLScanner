@@ -991,8 +991,7 @@ namespace RCLScanner
                                     }
                                 }
                             }
-                            else { Console.WriteLine("All Files In Online History"); }
-                            
+                            else { Console.WriteLine("All Files In Online History"); }                            
                         }
                         catch 
                         {
