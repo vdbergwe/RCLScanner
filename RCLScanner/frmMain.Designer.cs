@@ -274,7 +274,6 @@
             this.cmbDocType.FormattingEnabled = true;
             this.cmbDocType.Items.AddRange(new object[] {
             "POD",
-            "INV",
             "REPL_POD"});
             this.cmbDocType.Location = new System.Drawing.Point(112, 36);
             this.cmbDocType.Name = "cmbDocType";
