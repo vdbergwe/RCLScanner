@@ -24,6 +24,7 @@ using static System.Data.Entity.Infrastructure.Design.Executor;
 using System.Net.Sockets;
 using System.Security.Principal;
 using System.Security.Policy;
+using System.Collections.Generic;
 
 namespace RCLScanner
 {
@@ -31,6 +32,7 @@ namespace RCLScanner
     {
         string url = "https://rclmlsdash01.tsb.co.za/Fetch/Get_GlobalConfig?System=TSH";
         //string url = "https://localhost:44361/Fetch/Get_GlobalConfig?System=TSH";
+        string FileCheckUrl = "https://rclmlsdash01.tsb.co.za/Fetch/Get_GlobalConfig?System=TSH";
         string SelectedFile;
         string SelectedButton;
         string ScanDirectory;
@@ -913,8 +915,7 @@ namespace RCLScanner
                                     {
                                         bool isConnected = NetworkShareConnector.ConnectToNetworkShare(DocTypeUploadDirectory, "tsb.co.za\\" + Username, Password);
                                         if (isConnected)
-                                        {
-                                            // Perform operations on the network share...
+                                        {                                           
                                             File.Copy(file, DocTypeUploadDirectory + "\\" + OriginalFilename + ".pdf");
                                             File.Move(file, HistoryDirectory + "\\" + OriginalFilename + ".pdf");
                                             MyDataInstance.Publish(PODNumber, GRNumber, GRDateP, System.Environment.MachineName, System.Environment.UserName, Ip, OriginalFilename + ".pdf", DocType);
@@ -929,7 +930,7 @@ namespace RCLScanner
                                     catch (Exception ex)
                                     {
                                         Console.WriteLine("Error uploading file: " + ex.Message);
-                                        Console.WriteLine(DocTypeUploadDirectory + " - " + Username + " - " + Password);
+                                        Console.WriteLine(DocTypeUploadDirectory);
                                     }
                                 }                               
                             }
@@ -939,64 +940,59 @@ namespace RCLScanner
                             //MessageBox.Show(ex.ToString() + " - " + Username + " - " + Password);
                         }
 
-
                         try
                         {
-                            string[] fileNames = Directory.GetFiles(HistoryDirectory);
+                            WebRequest request = HttpWebRequest.Create(FileCheckUrl);
 
-                            FilesInHistory = fileNames.Count();
-
-                            if (FilesInHistory != FilesChecked) 
+                            using (WebResponse response = request.GetResponse())
                             {
-                                foreach (var file in fileNames)
+                                using (StreamReader jsonreader = new StreamReader(response.GetResponseStream()))
                                 {
-                                    FilesChecked++;
-                                    try
-                                    {
-                                        ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, OnlineHistoryDirectory, fileSharePath =>
+                                    string jsonResponse = jsonreader.ReadToEnd();
+                                    
+                                    List<FileCheckClass> FileList = JsonConvert.DeserializeObject<List<FileCheckClass>>(jsonResponse);
+                                   
+                                    foreach (FileCheckClass CheckFile in FileList)
+                                    {                                       
+                                        if (System.IO.File.Exists(HistoryDirectory + "\\" + CheckFile.Filename.ToUpper()))
                                         {
-                                            if (System.IO.File.Exists(OnlineHistoryDirectory + "\\" + System.IO.Path.GetFileName(file.ToUpper())))
-                                            {
-                                                Console.WriteLine("File in OnlineHistory Directory: " + System.IO.Path.GetFileName(file.ToUpper()).ToString());
-                                            }
-                                            else
-                                            {
-                                                File.Copy(file, OnlineHistoryDirectory + "\\" + System.IO.Path.GetFileName(file.ToUpper()));
-                                            }
-                                        });
-                                    }
-                                    catch
-                                    {
-
-                                        try
-                                        {
-                                            bool isConnected = NetworkShareConnector.ConnectToNetworkShare(OnlineHistoryDirectory, "tsb.co.za\\" + Username, Password);
-                                            if (isConnected)
-                                            {
-                                                if (System.IO.File.Exists(OnlineHistoryDirectory + "\\" + System.IO.Path.GetFileName(file.ToUpper())))
-                                                {
-                                                    Console.WriteLine("File in OnlineHistory Directory: " + System.IO.Path.GetFileName(file.ToUpper()).ToString());
-                                                }
-                                                else
-                                                {
-                                                    File.Copy(file, OnlineHistoryDirectory + "\\" + System.IO.Path.GetFileName(file.ToUpper()));
-                                                }
-                                                NetworkShareConnector.DisconnectFromNetworkShare(OnlineHistoryDirectory);
-                                            }
-                                            Console.ReadLine();
+                                            Console.WriteLine("File in OnlineHistory Directory: " + CheckFile.Filename.ToUpper().ToString());
                                         }
-                                        catch
-                                        {
+                                        else
+                                        {                                            
+                                            try
+                                            {
+                                                ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, OnlineHistoryDirectory, fileSharePath =>
+                                                {
+                                                     File.Copy(HistoryDirectory + "\\" + CheckFile.Filename.ToUpper(), OnlineHistoryDirectory + "\\" + CheckFile.Filename.ToUpper());
+                                                });
+                                            }
+                                            catch 
+                                            {
+                                                try
+                                                {
+                                                    bool isConnected = NetworkShareConnector.ConnectToNetworkShare(OnlineHistoryDirectory, "tsb.co.za\\" + Username, Password);
+                                                    if (isConnected)
+                                                    {
+                                                        File.Copy(HistoryDirectory + "\\" + CheckFile.Filename.ToUpper(), OnlineHistoryDirectory + "\\" + CheckFile.Filename.ToUpper());
+
+                                                        NetworkShareConnector.DisconnectFromNetworkShare(OnlineHistoryDirectory);
+                                                    }
+                                                    Console.ReadLine();
+                                                }
+                                                catch
+                                                {
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
-                            else { Console.WriteLine("All Files In Online History"); }                            
                         }
                         catch 
-                        {
-                            //MessageBox.Show(ex.ToString() + " - " + Username + " - " + Password);
-                        }
+                        { 
+
+                        }                       
 
                     }
                     else
@@ -1072,4 +1068,9 @@ namespace RCLScanner
         public string OnlineHistoryDirectory { get; set; }
     }
 
-}
+    public class FileCheckClass
+    {
+        public string Filename { get; set; }
+    }
+
+    }
