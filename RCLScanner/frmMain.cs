@@ -25,6 +25,7 @@ using System.Net.Sockets;
 using System.Security.Principal;
 using System.Security.Policy;
 using System.Collections.Generic;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace RCLScanner
 {
@@ -32,7 +33,7 @@ namespace RCLScanner
     {
         string url = "https://rclmlsdash01.tsb.co.za/Fetch/Get_GlobalConfig?System=TSH";
         //string url = "https://localhost:44361/Fetch/Get_GlobalConfig?System=TSH";
-        string FileCheckUrl = "https://rclmlsdash01.tsb.co.za/Fetch/Get_GlobalConfig?System=TSH";
+        string FileCheckUrl = "https://rclmlsdash01.tsb.co.za/Fetch/Get_OnlineRepository";
         string SelectedFile;
         string SelectedButton;
         string ScanDirectory;
@@ -953,21 +954,20 @@ namespace RCLScanner
                                     List<FileCheckClass> FileList = JsonConvert.DeserializeObject<List<FileCheckClass>>(jsonResponse);
                                    
                                     foreach (FileCheckClass CheckFile in FileList)
-                                    {                                       
+                                    {
+                                        var MyDataInstance = new DataPublish();
                                         if (System.IO.File.Exists(HistoryDirectory + "\\" + CheckFile.Filename.ToUpper()))
                                         {
-                                            Console.WriteLine("File in OnlineHistory Directory: " + CheckFile.Filename.ToUpper().ToString());
-                                        }
-                                        else
-                                        {                                            
                                             try
                                             {
                                                 ImpersonationHelper.Impersonate("tsb.co.za", Username, Password, OnlineHistoryDirectory, fileSharePath =>
                                                 {
-                                                     File.Copy(HistoryDirectory + "\\" + CheckFile.Filename.ToUpper(), OnlineHistoryDirectory + "\\" + CheckFile.Filename.ToUpper());
+                                                    File.Copy(HistoryDirectory + "\\" + CheckFile.Filename.ToUpper(), OnlineHistoryDirectory + "\\" + CheckFile.Filename.ToUpper());
                                                 });
+                                                MyDataInstance.UpdatePOD(CheckFile.Filename.ToUpper());
+
                                             }
-                                            catch 
+                                            catch
                                             {
                                                 try
                                                 {
@@ -978,12 +978,18 @@ namespace RCLScanner
 
                                                         NetworkShareConnector.DisconnectFromNetworkShare(OnlineHistoryDirectory);
                                                     }
+                                                    MyDataInstance.UpdatePOD(CheckFile.Filename.ToUpper());
                                                     Console.ReadLine();
                                                 }
                                                 catch
                                                 {
                                                 }
                                             }
+                                            
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("File in OnlineHistory Directory: " + CheckFile.Filename.ToUpper().ToString());
                                         }
                                     }
                                 }

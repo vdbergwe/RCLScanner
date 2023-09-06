@@ -16,6 +16,47 @@ namespace RCLScanner
     internal class DataPublish
     {
 
+        public async void UpdatePOD(string DocName)
+        {
+            try
+            {
+                string baseUrl = "https://rclmlsdash01.tsb.co.za/Fetch/UpdateLog";
+                string variableName = "DocName";
+
+                // Construct the URL with the variable as a query parameter
+                string url = $"{baseUrl}?{variableName}={DocName}";
+
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    try
+                    {
+                        // Make the GET request
+                        HttpResponseMessage response = await httpClient.GetAsync(url);
+
+                        // Check if the request was successful (status code 200 OK)
+                        if (response.IsSuccessStatusCode)
+                        {
+                            // Read the response content if needed
+                            string responseBody = await response.Content.ReadAsStringAsync();
+                            Console.WriteLine("Response: " + responseBody);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error: " + response.StatusCode);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Exception: " + ex.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+            }
+        }
+
 
         public async void Publish(string UpVbeln, string UpGRNumber, DateTime UpGRDate, string UpComputerName, string UpUsername, string UpIP, string UpDocumentName, string SDocType) {
             try
